@@ -1,12 +1,103 @@
-# React + Vite
+### `README.md`
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+````markdown
+# Is it Shenmue?
 
-Currently, two official plugins are available:
+A web app to check how close a video game is to *Shenmue*, using IGDB data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Search for games by title.
+- Shows genres, platforms, and summary.
+- Calculates a "Shenmue score" based on genres and platforms.
+- Uses a backend proxy to safely access IGDB API and hide credentials.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Setup
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd is-it-shenmue
+````
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set environment variables
+
+1. Copy `.env.example` to `.env`:
+
+```bash
+cp .env.example .env
+```
+
+2. Fill in your **Twitch/IGDB credentials**:
+
+```
+TWITCH_CLIENT_ID=your_client_id
+TWITCH_ACCESS_TOKEN=your_access_token
+PORT=4000
+```
+
+> **Do not commit `.env`** — it contains secrets.
+
+### 4. Run locally
+
+* Start backend server only:
+
+```bash
+npm run dev-server
+```
+
+* Start frontend only:
+
+```bash
+npm run dev
+```
+
+* Start both concurrently:
+
+```bash
+npm run start
+```
+
+> Requires `concurrently` package (already included in dependencies).
+
+---
+
+## Deployment
+
+* When deploying to Netlify:
+
+  * Set the same environment variables (`TWITCH_CLIENT_ID`, `TWITCH_ACCESS_TOKEN`) in **Site settings → Build & deploy → Environment → Environment variables**.
+  * The backend proxy will use them automatically.
+
+---
+
+## Future Improvements
+
+* Refine the "Shenmue score" algorithm.
+* Replace placeholder playtime with actual data from IGDB.
+* Add mobile-friendly UI and animations.
+* Support more granular scoring (title similarity, popularity, release year, etc.).
+
+---
+
+## License
+
+MIT
+
+```
+
+---
+
+This README makes it **safe for pushing to GitHub**, clearly explains how to set up `.env`, and gives collaborators everything they need.
+
+If you want, I can also **add a diagram showing frontend ↔ backend ↔ IGDB flow** to make it visually clear. That’s often helpful in game-data projects like this. Do you want me to do that?
+```
