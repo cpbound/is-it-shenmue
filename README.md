@@ -1,6 +1,3 @@
-### `README.md`
-
-````markdown
 # Is it Shenmue?
 
 A web app to check how close a video game is to *Shenmue*, using IGDB data.
@@ -92,12 +89,3 @@ npm run start
 ## License
 
 MIT
-
-```
-
----
-
-This README makes it **safe for pushing to GitHub**, clearly explains how to set up `.env`, and gives collaborators everything they need.
-
-If you want, I can also **add a diagram showing frontend ↔ backend ↔ IGDB flow** to make it visually clear. That’s often helpful in game-data projects like this. Do you want me to do that?
-```
