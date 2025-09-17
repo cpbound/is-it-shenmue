@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [query, setQuery] = useState("");
+  const [result, setResult] = useState(null);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // For now, just set a mock result until API is wired
+    setResult({
+      title: query,
+      shenmueness: Math.floor(Math.random() * 101), // random score
+    });
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div style={{ fontFamily: "sans-serif", padding: "2rem" }}>
+      <h1>Is It Shenmue?</h1>
+      <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
+        <input
+          type="text"
+          placeholder="Search for a game..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ padding: "0.5rem", width: "250px" }}
+        />
+        <button type="submit" style={{ marginLeft: "0.5rem", padding: "0.5rem" }}>
+          Check
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      </form>
+
+      {result && (
+        <div>
+          <h2>{result.title}</h2>
+          <p>Shenmueness Score: {result.shenmueness}%</p>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
