@@ -1,44 +1,80 @@
 // src/App.jsx
 import { useState } from "react";
+import { searchGame } from "./utils/igdb";
 
 function App() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState(null);
 
-  const handleSearch = (e) => {
+  // Simple Shenmue scoring function (customize later)
+  const calculateShenmueness = (game) => {
+    let score = 0;
+
+    if (game.genres.includes("Adventure")) score += 3;
+    if (game.genres.includes("Action")) score += 2;
+
+    if (game.platforms.includes("Dreamcast")) score += 5;
+
+    if (game.playtime && game.playtime >= 20) score += 2;
+
+    return score;
+  };
+
+  const handleSearch = async (e) => {
     e.preventDefault();
-    setResult({
-      title: query,
-      shenmueness: Math.floor(Math.random() * 101),
-    });
+
+    try {
+      const games = await searchGame(query);
+      if (!games.length) return alert("No games found");
+
+      const game = games[0]; // pick the first result
+
+      const enrichedGame = {
+        title: game.name,
+        genres: game.genres || [],
+        platforms: game.platforms || [],
+        playtime: 30, // placeholder, can update later
+        summary: game.summary,
+        cover: game.cover?.url,
+      };
+
+      const shenmueScore = calculateShenmueness(enrichedGame);
+
+      setResult({
+        ...enrichedGame,
+        shenmueness: shenmueScore,
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Error searching for games");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-6 font-sans">
-      <h1 className="text-3xl font-bold mb-6">Is It Shenmue?</h1>
-      <form onSubmit={handleSearch} className="mb-6 flex space-x-2">
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Is it Shenmue?</h1>
+
+      <form onSubmit={handleSearch} className="mb-6">
         <input
           type="text"
-          placeholder="Search for a game..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Enter game title"
+          className="border p-2 w-full mb-2"
         />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Check
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          Search
         </button>
       </form>
 
       {result && (
-        <div className="bg-white shadow-md rounded-lg p-4 w-80 text-center">
-          <h2 className="text-xl font-semibold mb-2">{result.title}</h2>
-          <p className="text-gray-700">
-            Shenmueness Score:{" "}
-            <span className="font-bold text-blue-600">{result.shenmueness}%</span>
-          </p>
+        <div className="border p-4 rounded">
+          <h2 className="text-xl font-semibold">{result.title}</h2>
+          {result.cover && <img src={result.cover} alt={result.title} className="my-2 w-48" />}
+          <p><strong>Genres:</strong> {result.genres.join(", ")}</p>
+          <p><strong>Platforms:</strong> {result.platforms.join(", ")}</p>
+          <p><strong>Shenmue Score:</strong> {result.shenmueness}</p>
+          {result.summary && <p className="mt-2">{result.summary}</p>}
         </div>
       )}
     </div>
